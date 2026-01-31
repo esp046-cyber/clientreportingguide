@@ -1,0 +1,3187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Client Reporting Automation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1%;
+            line-height: 1.4;
+            color: #1a1a2e;
+        }
+        
+        .container {
+            max-width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 12px 1%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        .content {
+            padding: 1%;
+        }
+        
+        .section {
+            margin-bottom: 16px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 12px 1%;
+            border-left: 3px solid #667eea;
+        }
+        
+        h2 {
+            font-size: 12px;
+            color: #667eea;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        h3 {
+            font-size: 11px;
+            color: #16213e;
+            margin: 10px 0 6px 0;
+            font-weight: 600;
+        }
+        
+        p, li {
+            font-size: 10px;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        
+        ul {
+            margin-left: 16px;
+        }
+        
+        .step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 9px;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #ffc107;
+            margin: 8px 0;
+            font-size: 9px;
+        }
+        
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .tool-card {
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            font-size: 9px;
+        }
+        
+        .tool-name {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 3px;
+        }
+        
+        .metric {
+            display: inline-block;
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            margin: 2px;
+            font-weight: 500;
+        }
+        
+        code {
+            background: #f1f3f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 10px 1%;
+            text-align: center;
+            font-size: 9px;
+        }
+        
+        .tutorial {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        
+        .tutorial-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .tutorial-header:hover {
+            background: linear-gradient(135deg, #7c8ff0 0%, #8557b0 100%);
+        }
+        
+        .tutorial-icon {
+            font-size: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .tutorial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 10px;
+        }
+        
+        .tutorial-content.active {
+            max-height: 2000px;
+            padding: 10px;
+        }
+        
+        .tutorial-step {
+            background: #f8f9fa;
+            padding: 8px;
+            margin: 6px 0;
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+        }
+        
+        .tutorial-step-title {
+            font-weight: 600;
+            color: #16213e;
+            font-size: 10px;
+            margin-bottom: 4px;
+        }
+        
+        .tutorial-step-content {
+            font-size: 9px;
+            color: #555;
+        }
+        
+        .time-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 8px;
+            margin-left: 6px;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            background: #17a2b8;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 8px;
+            margin-left: 6px;
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 12px; }
+            h2 { font-size: 11px; }
+            h3 { font-size: 10px; }
+            p, li { font-size: 9px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>2026 Client Reporting Automation Guide</h1>
+            <div class="subtitle">AI Operations for Marketing Agencies</div>
+        </header>
+        
+        <div class="content">
+            
+            <div class="section">
+                <h2>🎯 Why AI-Powered Reporting?</h2>
+                <p>Marketing agencies in 2026 leverage AI to reduce reporting time by 87%, increase accuracy, and deliver predictive insights clients actually need.</p>
+                <div class="highlight">
+                    <strong>Key Benefit:</strong> Transform 40 hours/month of manual reporting into 2 hours of strategic oversight
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🛠️ Essential AI Automation Stack</h2>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Data Integration</div>
+                        Supermetrics AI, Funnel.io, Claude API
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">AI Analysis</div>
+                        ChatGPT Enterprise, Claude Sonnet 4.5, Gemini Advanced
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Visualization</div>
+                        Tableau AI, Looker Studio, Power BI Copilot
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Distribution</div>
+                        Make.com, Zapier AI, n8n workflows
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>📋 Step-by-Step Implementation</h2>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Data Source Connection</strong>
+                    <p>Connect all client platforms via APIs: Google Ads, Meta Ads, LinkedIn, GA4, CRM systems. Use Supermetrics or custom API integrations to centralize data into BigQuery or Snowflake.</p>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>AI-Powered Data Processing</strong>
+                    <p>Deploy Claude or GPT-4 to clean, normalize, and enrich data. Create prompts for anomaly detection, trend identification, and automated commentary generation.</p>
+                    <code>Example: "Analyze campaign data, identify top 3 performers and bottom 3 underperformers with reasons"</code>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Template Creation</strong>
+                    <p>Build dynamic report templates in Looker Studio or Tableau. Use AI to auto-generate executive summaries, action items, and strategic recommendations based on KPI thresholds.</p>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>Workflow Automation</strong>
+                    <p>Set up Make.com or Zapier workflows to trigger reports weekly/monthly. Include automated data fetching, AI analysis, PDF generation, and email distribution.</p>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <strong>Predictive Insights Layer</strong>
+                    <p>Integrate machine learning models to forecast performance, budget optimization, and seasonal trends. Use Claude to translate predictions into actionable client language.</p>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">6</span>
+                    <strong>Quality Control & Delivery</strong>
+                    <p>Implement human-in-the-loop review for critical insights. Schedule automated delivery with personalized video summaries using AI avatars (Synthesia, HeyGen).</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>📊 Critical Metrics to Automate</h2>
+                <div style="margin-top: 10px;">
+                    <span class="metric">ROAS/ROI</span>
+                    <span class="metric">CPA/CPL</span>
+                    <span class="metric">CTR Trends</span>
+                    <span class="metric">Conversion Rate</span>
+                    <span class="metric">LTV:CAC Ratio</span>
+                    <span class="metric">Attribution Models</span>
+                    <span class="metric">Budget Pacing</span>
+                    <span class="metric">Channel Performance</span>
+                    <span class="metric">Creative Fatigue</span>
+                    <span class="metric">Audience Insights</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🤖 AI Prompt Framework for Reports</h2>
+                
+                <h3>Executive Summary Generator</h3>
+                <p style="background: #f8f9fa; padding: 6px; border-radius: 3px; font-family: monospace; font-size: 9px;">
+                    "Analyze this marketing data for [Client Name]. Create a 3-paragraph executive summary highlighting: 1) Overall performance vs goals, 2) Top 3 wins with data, 3) Top 3 concerns with recommendations. Use professional tone, avoid jargon."
+                </p>
+                
+                <h3>Anomaly Detection</h3>
+                <p style="background: #f8f9fa; padding: 6px; border-radius: 3px; font-family: monospace; font-size: 9px;">
+                    "Review campaign metrics for statistical anomalies. Flag: 1) Sudden drops >20%, 2) CTR changes >15%, 3) Budget overspend >10%. Explain likely causes and urgency level."
+                </p>
+                
+                <h3>Strategic Recommendations</h3>
+                <p style="background: #f8f9fa; padding: 6px; border-radius: 3px; font-family: monospace; font-size: 9px;">
+                    "Based on performance data, provide 5 prioritized action items for next month. Include expected impact, effort level, and specific implementation steps."
+                </p>
+            </div>
+            
+            <div class="section">
+                <h2>⚡ Advanced Automation Techniques</h2>
+                
+                <h3>Real-Time Alert System</h3>
+                <ul>
+                    <li>Set up threshold-based triggers in Google Analytics + Claude API</li>
+                    <li>Auto-generate Slack/Email alerts with AI-written context</li>
+                    <li>Include recommended immediate actions</li>
+                </ul>
+                
+                <h3>Client-Specific Language Adaptation</h3>
+                <ul>
+                    <li>Store client preference profiles (formal vs casual, metric depth)</li>
+                    <li>Use AI to adjust tone, terminology, and detail level per client</li>
+                    <li>Auto-translate reports for international clients</li>
+                </ul>
+                
+                <h3>Competitive Intelligence Integration</h3>
+                <ul>
+                    <li>Use web scraping + AI analysis for competitor ad spend tracking</li>
+                    <li>Automated industry benchmark comparisons</li>
+                    <li>AI-generated competitive positioning insights</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>🎨 2026 Report Design Trends</h2>
+                <ul>
+                    <li><strong>Micro-interactions:</strong> Interactive dashboards with hover insights</li>
+                    <li><strong>Dark mode default:</strong> Easier on eyes, premium feel</li>
+                    <li><strong>Mobile-first:</strong> 68% of executives review on mobile</li>
+                    <li><strong>Video summaries:</strong> 90-second AI avatar walkthroughs</li>
+                    <li><strong>Narrative flow:</strong> Story-driven insights over data dumps</li>
+                    <li><strong>Predictive overlays:</strong> "What happens if..." scenarios</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>✅ Implementation Checklist</h2>
+                <ul>
+                    <li>☐ Audit all client data sources and API access</li>
+                    <li>☐ Choose primary AI model (Claude/GPT-4/Gemini)</li>
+                    <li>☐ Set up data warehouse (BigQuery/Snowflake)</li>
+                    <li>☐ Create master report template library</li>
+                    <li>☐ Build automation workflows (Make/Zapier)</li>
+                    <li>☐ Develop AI prompt library for consistency</li>
+                    <li>☐ Test end-to-end automation with pilot client</li>
+                    <li>☐ Train team on quality control processes</li>
+                    <li>☐ Establish feedback loop for continuous improvement</li>
+                    <li>☐ Document SOPs for troubleshooting</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>🎓 Beginner Tutorials</h2>
+                <p style="margin-bottom: 12px;">Click each tutorial to expand step-by-step instructions</p>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>1. Getting Started with API Connections<span class="time-badge">⏱ 45 min</span><span class="difficulty-badge">★☆☆ Easy</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Create Google Ads API Access</div>
+                            <div class="tutorial-step-content">
+                                • Go to Google Ads → Tools & Settings → Setup → API Center<br>
+                                • Click "Create API Access" and note your Developer Token<br>
+                                • Enable Google Ads API in Google Cloud Console<br>
+                                • Create OAuth 2.0 credentials (Client ID & Secret)
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Connect Meta Ads API</div>
+                            <div class="tutorial-step-content">
+                                • Visit Meta for Developers (developers.facebook.com)<br>
+                                • Create a new app → Select "Business" type<br>
+                                • Add "Marketing API" product<br>
+                                • Generate Access Token with ads_read permissions<br>
+                                • Save token securely in password manager
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Set Up Google Analytics 4 API</div>
+                            <div class="tutorial-step-content">
+                                • Open Google Cloud Console → Enable GA4 Data API<br>
+                                • Create Service Account with Viewer role<br>
+                                • Download JSON key file<br>
+                                • Add service account email to GA4 property with Read permissions
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Test API Connections</div>
+                            <div class="tutorial-step-content">
+                                • Use Postman or Insomnia to test API calls<br>
+                                • Example Google Ads query: GET campaigns list<br>
+                                • Verify you receive valid JSON responses<br>
+                                • Document all credentials in secure vault (1Password, LastPass)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>2. Your First Automated Report in 30 Minutes<span class="time-badge">⏱ 30 min</span><span class="difficulty-badge">★☆☆ Easy</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Install Supermetrics for Google Sheets</div>
+                            <div class="tutorial-step-content">
+                                • Open Google Sheets → Extensions → Add-ons → Get add-ons<br>
+                                • Search "Supermetrics" → Install (free trial available)<br>
+                                • Authorize access to your Google account<br>
+                                • Launch Supermetrics from Extensions menu
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Pull Data from Google Ads</div>
+                            <div class="tutorial-step-content">
+                                • In Supermetrics sidebar → Select "Google Ads"<br>
+                                • Choose account and date range (Last 30 days)<br>
+                                • Select metrics: Impressions, Clicks, Cost, Conversions, ROAS<br>
+                                • Click "Get Data to Table" → Data appears in sheet
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Create Looker Studio Dashboard</div>
+                            <div class="tutorial-step-content">
+                                • Go to lookerstudio.google.com<br>
+                                • Create → Data Source → Google Sheets<br>
+                                • Connect your Supermetrics sheet<br>
+                                • Create → Report → Add charts (scorecards, line charts, tables)<br>
+                                • Customize colors and layout
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Schedule Auto-Refresh</div>
+                            <div class="tutorial-step-content">
+                                • In Google Sheets → Supermetrics → Schedule refresh<br>
+                                • Set daily refresh at 6 AM<br>
+                                • Looker Studio will auto-update when sheet updates<br>
+                                • Share report link with clients → Done!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>3. AI Prompt Writing 101 for Reporting<span class="time-badge">⏱ 20 min</span><span class="difficulty-badge">★☆☆ Easy</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Understand the Prompt Structure</div>
+                            <div class="tutorial-step-content">
+                                <strong>Formula: Context + Task + Format + Constraints</strong><br>
+                                • Context: "You are a marketing analyst for [Client]"<br>
+                                • Task: "Analyze this campaign data and identify trends"<br>
+                                • Format: "Provide 3 bullet points with specific numbers"<br>
+                                • Constraints: "Keep it under 100 words, avoid jargon"
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Write Your First Analysis Prompt</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f8f9fa; padding: 8px; border-radius: 4px; margin-top: 6px;">
+"You are analyzing marketing data for an e-commerce client.
+
+Data: [Paste your CSV or metrics here]
+
+Task: Identify the top 3 best-performing campaigns and explain why they performed well using specific metrics.
+
+Format: For each campaign provide:
+- Campaign name
+- Key metric (ROAS, CTR, or Conversion Rate)
+- One-sentence explanation
+
+Keep insights actionable and under 150 words total."</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Test and Refine</div>
+                            <div class="tutorial-step-content">
+                                • Copy prompt into Claude or ChatGPT<br>
+                                • Paste sample data (even fake data for testing)<br>
+                                • Review output quality<br>
+                                • Refine prompt if output is too long/short/vague<br>
+                                • Save working prompts in a prompt library document
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Build Your Prompt Library</div>
+                            <div class="tutorial-step-content">
+                                Create Google Doc with these prompt categories:<br>
+                                • Executive Summaries<br>
+                                • Anomaly Detection<br>
+                                • Trend Analysis<br>
+                                • Recommendations<br>
+                                • Client-facing explanations<br>
+                                Version control: Add date and what works/doesn't to each prompt
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>4. Understanding Marketing Metrics<span class="time-badge">⏱ 25 min</span><span class="difficulty-badge">★☆☆ Easy</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">ROAS (Return on Ad Spend)</div>
+                            <div class="tutorial-step-content">
+                                <strong>Formula:</strong> Revenue ÷ Ad Spend<br>
+                                <strong>Example:</strong> $10,000 revenue ÷ $2,000 spend = 5.0 ROAS<br>
+                                <strong>Meaning:</strong> For every $1 spent, you earned $5 back<br>
+                                <strong>Good benchmark:</strong> 4.0+ for e-commerce, 2.0+ for lead gen<br>
+                                <strong>When to use:</strong> Measuring overall campaign profitability
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">CPA (Cost Per Acquisition)</div>
+                            <div class="tutorial-step-content">
+                                <strong>Formula:</strong> Total Ad Spend ÷ Total Conversions<br>
+                                <strong>Example:</strong> $5,000 spend ÷ 100 conversions = $50 CPA<br>
+                                <strong>Meaning:</strong> Cost to acquire one customer/lead<br>
+                                <strong>Good benchmark:</strong> Should be < 30% of customer LTV<br>
+                                <strong>When to use:</strong> Comparing campaign efficiency
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">CTR (Click-Through Rate)</div>
+                            <div class="tutorial-step-content">
+                                <strong>Formula:</strong> (Clicks ÷ Impressions) × 100<br>
+                                <strong>Example:</strong> (500 clicks ÷ 50,000 impressions) × 100 = 1.0% CTR<br>
+                                <strong>Meaning:</strong> Percentage of people who clicked your ad<br>
+                                <strong>Good benchmark:</strong> 2%+ for search, 0.5%+ for display<br>
+                                <strong>When to use:</strong> Evaluating ad creative effectiveness
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">LTV:CAC Ratio (Lifetime Value to Customer Acquisition Cost)</div>
+                            <div class="tutorial-step-content">
+                                <strong>Formula:</strong> Customer Lifetime Value ÷ Customer Acquisition Cost<br>
+                                <strong>Example:</strong> $300 LTV ÷ $100 CAC = 3:1 ratio<br>
+                                <strong>Meaning:</strong> Long-term value vs. cost to acquire<br>
+                                <strong>Good benchmark:</strong> 3:1 minimum, 5:1+ excellent<br>
+                                <strong>When to use:</strong> Strategic business health assessment
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Conversion Rate</div>
+                            <div class="tutorial-step-content">
+                                <strong>Formula:</strong> (Conversions ÷ Clicks) × 100<br>
+                                <strong>Example:</strong> (50 conversions ÷ 1,000 clicks) × 100 = 5% CR<br>
+                                <strong>Meaning:</strong> Percentage of clicks that became customers<br>
+                                <strong>Good benchmark:</strong> 2-5% for e-commerce, 10%+ for B2B<br>
+                                <strong>When to use:</strong> Measuring landing page and offer quality
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>5. Setting Up Your First Zapier Workflow<span class="time-badge">⏱ 35 min</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Create Zapier Account</div>
+                            <div class="tutorial-step-content">
+                                • Go to zapier.com → Sign up (Free plan available)<br>
+                                • Verify email and complete onboarding<br>
+                                • Click "Create Zap" button<br>
+                                • Name your Zap: "Weekly Google Ads Report"
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Set Up Trigger (Schedule)</div>
+                            <div class="tutorial-step-content">
+                                • Choose Trigger App: "Schedule by Zapier"<br>
+                                • Select Event: "Every Week"<br>
+                                • Configure: Day = Monday, Time = 9:00 AM<br>
+                                • Test trigger → Continue
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Add Action (Fetch Google Ads Data)</div>
+                            <div class="tutorial-step-content">
+                                • Click "+ Add Step" → Choose "Google Ads"<br>
+                                • Action Event: "Find Campaign" or use "Webhooks" + API<br>
+                                • Connect your Google Ads account<br>
+                                • Select account and configure date range (Last 7 days)<br>
+                                • Test action to see data retrieved
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Add Google Sheets Update</div>
+                            <div class="tutorial-step-content">
+                                • Click "+ Add Step" → Choose "Google Sheets"<br>
+                                • Action: "Create Spreadsheet Row"<br>
+                                • Select your reporting spreadsheet<br>
+                                • Map fields: Date, Impressions, Clicks, Cost, etc.<br>
+                                • Test step to verify data is written correctly
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Add Email Notification</div>
+                            <div class="tutorial-step-content">
+                                • Click "+ Add Step" → Choose "Email by Zapier"<br>
+                                • Action: "Send Outbound Email"<br>
+                                • To: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a4ddcbd1d68ac1c9c5cdc8e4c5c3c1cac7dd8ac7cbc9">[email&#160;protected]</a><br>
+                                • Subject: "Weekly Google Ads Report Ready"<br>
+                                • Body: Include link to Google Sheet or Looker Studio<br>
+                                • Test and Turn On Zap!
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Monitor and Optimize</div>
+                            <div class="tutorial-step-content">
+                                • Check Zap History tab for successful runs<br>
+                                • Review any errors and fix configuration<br>
+                                • Add filters to exclude test campaigns<br>
+                                • Consider upgrading workflow: Add Slack notifications, AI analysis step, or PDF generation
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>📚 Intermediate Guides</h2>
+                <p style="margin-bottom: 12px;">Click each guide to expand detailed instructions</p>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>6. Building a Data Warehouse with BigQuery<span class="time-badge">⏱ 90 min</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Set Up Google Cloud Project</div>
+                            <div class="tutorial-step-content">
+                                • Go to console.cloud.google.com → Create new project<br>
+                                • Name it "Agency-Data-Warehouse"<br>
+                                • Enable billing (free $300 credit for new users)<br>
+                                • Navigate to BigQuery in the left menu<br>
+                                • Pin BigQuery to your navigation bar
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Create Dataset Structure</div>
+                            <div class="tutorial-step-content">
+                                • Click "Create Dataset" → Name: "marketing_data"<br>
+                                • Data location: US (or nearest region)<br>
+                                • Create separate datasets for:<br>
+                                  - raw_data (unprocessed data)<br>
+                                  - staging (transformed data)<br>
+                                  - reporting (final reporting tables)<br>
+                                • Set default table expiration: None for reporting, 90 days for raw
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Create Your First Table Schema</div>
+                            <div class="tutorial-step-content">
+                                • In raw_data dataset → Create Table<br>
+                                • Table name: "google_ads_campaigns"<br>
+                                • Define schema:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+date: DATE
+campaign_id: STRING
+campaign_name: STRING
+impressions: INTEGER
+clicks: INTEGER
+cost: FLOAT
+conversions: INTEGER
+revenue: FLOAT</code>
+                                • Partition by: date (for query optimization)
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Load Data from Google Sheets</div>
+                            <div class="tutorial-step-content">
+                                • Create Table → Source: Google Drive<br>
+                                • Select your Supermetrics sheet<br>
+                                • File format: Google Sheet<br>
+                                • Destination table: raw_data.google_ads_campaigns<br>
+                                • Write preference: "Append to table"<br>
+                                • Create table → Schedule query to refresh daily
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Write Your First SQL Query</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+SELECT 
+  campaign_name,
+  SUM(impressions) as total_impressions,
+  SUM(clicks) as total_clicks,
+  SUM(cost) as total_cost,
+  SUM(revenue) / SUM(cost) as roas
+FROM `marketing_data.raw_data.google_ads_campaigns`
+WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+GROUP BY campaign_name
+ORDER BY roas DESC
+LIMIT 10;</code>
+                                • Run query → Save results to new table in reporting dataset
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Automate with Scheduled Queries</div>
+                            <div class="tutorial-step-content">
+                                • Click "Schedule" button in query editor<br>
+                                • Name: "Daily Campaign Performance"<br>
+                                • Repeat: Daily at 7:00 AM<br>
+                                • Destination table: reporting.campaign_performance<br>
+                                • Write preference: "Overwrite table"<br>
+                                • Set up email notifications on failure<br>
+                                • Create schedule → Monitor in "Scheduled queries" tab
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>7. Creating Dynamic Dashboard Templates in Looker Studio<span class="time-badge">⏱ 60 min</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Connect BigQuery as Data Source</div>
+                            <div class="tutorial-step-content">
+                                • Go to lookerstudio.google.com → Create → Data Source<br>
+                                • Select "BigQuery" connector<br>
+                                • Choose your project → marketing_data → reporting dataset<br>
+                                • Select campaign_performance table<br>
+                                • Click "Connect" → Name source "Campaign Performance Data"
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Create Calculated Fields</div>
+                            <div class="tutorial-step-content">
+                                • In data source → Add Field<br>
+                                <strong>CTR:</strong> <code>(clicks / impressions) * 100</code><br>
+                                <strong>CPC:</strong> <code>cost / clicks</code><br>
+                                <strong>Conversion Rate:</strong> <code>(conversions / clicks) * 100</code><br>
+                                <strong>Cost Per Conversion:</strong> <code>cost / conversions</code><br>
+                                • Set proper data types (Number with 2 decimals)
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Design Master Template Layout</div>
+                            <div class="tutorial-step-content">
+                                • Create Report → Start with blank canvas<br>
+                                • Add header section (20% of page):<br>
+                                  - Client logo placeholder<br>
+                                  - Report title with date range parameter<br>
+                                  - Date range control (interactive)<br>
+                                • Add KPI scorecard row (4 cards):<br>
+                                  - Total Spend | Total Revenue | ROAS | Conversions<br>
+                                • Add main content area (60%):<br>
+                                  - Line chart: Performance over time<br>
+                                  - Bar chart: Top campaigns by ROAS<br>
+                                  - Table: Detailed campaign metrics
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Add Conditional Formatting</div>
+                            <div class="tutorial-step-content">
+                                • Select ROAS scorecard → Style tab<br>
+                                • Enable conditional formatting:<br>
+                                  - Green: ROAS ≥ 4.0<br>
+                                  - Yellow: ROAS 2.0-3.9<br>
+                                  - Red: ROAS < 2.0<br>
+                                • Apply same logic to CTR (Green ≥2%, Yellow 1-2%, Red <1%)<br>
+                                • In table, highlight top 3 performers in green
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Create Client-Specific Parameters</div>
+                            <div class="tutorial-step-content">
+                                • Add control → Drop-down list<br>
+                                • Control field: campaign_name<br>
+                                • Apply filters to all charts<br>
+                                • Add second parameter for "Channel" (Search, Display, Social)<br>
+                                • Create calculated field for dynamic titles:<br>
+                                <code>CONCAT("Performance for ", campaign_name)</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Make Template Reusable</div>
+                            <div class="tutorial-step-content">
+                                • File → Make a copy → This creates template<br>
+                                • For new client: Copy template → Connect new data source<br>
+                                • Use "Blend data" to combine multiple sources<br>
+                                • Save as "Template - Client Dashboard Master"<br>
+                                • Share with view-only access for clients<br>
+                                • Enable "Schedule email delivery" for automatic sending
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>8. Integrating Multiple Data Sources<span class="time-badge">⏱ 75 min</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Map Data Sources to Unified Schema</div>
+                            <div class="tutorial-step-content">
+                                Create standardized field mapping document:<br>
+                                <strong>Common Fields Across Platforms:</strong><br>
+                                • date, platform, campaign_id, campaign_name<br>
+                                • impressions, clicks, spend, conversions, revenue<br>
+                                • Google Ads "cost" → "spend"<br>
+                                • Meta "amount_spent" → "spend"<br>
+                                • LinkedIn "costInLocalCurrency" → "spend"<br>
+                                Document all transformations needed
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Set Up Supermetrics Multi-Platform Pull</div>
+                            <div class="tutorial-step-content">
+                                • Create new Google Sheet "Master Marketing Data"<br>
+                                • Tab 1: Google Ads (Supermetrics query)<br>
+                                • Tab 2: Meta Ads (Supermetrics query)<br>
+                                • Tab 3: LinkedIn Ads (Supermetrics query)<br>
+                                • Tab 4: GA4 Traffic (Supermetrics query)<br>
+                                • Tab 5: Unified Data (consolidation sheet)<br>
+                                • Schedule all queries to run at 6 AM daily
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Create Consolidation Query in BigQuery</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+-- Google Ads Data
+SELECT 
+  date, 
+  'Google Ads' as platform,
+  campaign_id,
+  campaign_name,
+  impressions,
+  clicks,
+  cost as spend,
+  conversions,
+  revenue
+FROM `raw_data.google_ads_campaigns`
+
+UNION ALL
+
+-- Meta Ads Data
+SELECT 
+  date,
+  'Meta Ads' as platform,
+  campaign_id,
+  campaign_name,
+  impressions,
+  clicks,
+  amount_spent as spend,
+  conversions,
+  revenue
+FROM `raw_data.meta_ads_campaigns`
+
+UNION ALL
+
+-- LinkedIn Ads Data
+SELECT
+  date,
+  'LinkedIn Ads' as platform,
+  campaign_id,
+  campaign_name,
+  impressions,
+  clicks,
+  cost_in_local_currency as spend,
+  conversions,
+  revenue
+FROM `raw_data.linkedin_ads_campaigns`;</code>
+                                Save as view: "unified_platform_data"
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Handle Data Discrepancies</div>
+                            <div class="tutorial-step-content">
+                                • Identify mismatched date formats → Standardize to YYYY-MM-DD<br>
+                                • Handle NULL values in conversions → COALESCE(conversions, 0)<br>
+                                • Currency conversions if needed → multiply by exchange_rate<br>
+                                • Time zone alignment → CONVERT_TZ() functions<br>
+                                • Add data_quality_flag field to track issues
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Create Cross-Platform Analysis Table</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+CREATE OR REPLACE TABLE reporting.cross_platform_performance AS
+SELECT
+  date,
+  platform,
+  SUM(impressions) as impressions,
+  SUM(clicks) as clicks,
+  SUM(spend) as spend,
+  SUM(conversions) as conversions,
+  SUM(revenue) as revenue,
+  SAFE_DIVIDE(SUM(revenue), SUM(spend)) as roas,
+  SAFE_DIVIDE(SUM(clicks), SUM(impressions)) * 100 as ctr,
+  SAFE_DIVIDE(SUM(spend), SUM(conversions)) as cpa
+FROM `marketing_data.unified_platform_data`
+GROUP BY date, platform
+ORDER BY date DESC;</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Build Unified Dashboard</div>
+                            <div class="tutorial-step-content">
+                                • Connect Looker Studio to cross_platform_performance table<br>
+                                • Create platform comparison charts:<br>
+                                  - Stacked area chart: Spend by platform over time<br>
+                                  - Scatter plot: ROAS vs Spend by platform<br>
+                                  - Table: Platform performance comparison<br>
+                                • Add platform filter control<br>
+                                • Enable drill-down from platform → campaigns<br>
+                                • Test with real data from all 3+ platforms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>9. Anomaly Detection Setup<span class="time-badge">⏱ 50 min</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Define Anomaly Thresholds</div>
+                            <div class="tutorial-step-content">
+                                Create threshold document for your agency:<br>
+                                <strong>Critical Alerts (Immediate):</strong><br>
+                                • Spend increase >50% day-over-day<br>
+                                • ROAS drop >30%<br>
+                                • CTR drop >25%<br>
+                                • Zero conversions for 2+ days<br>
+                                <strong>Warning Alerts (Review within 24h):</strong><br>
+                                • Spend increase 20-50%<br>
+                                • ROAS drop 15-30%<br>
+                                • CTR drop 10-25%
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Create Anomaly Detection Query</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+WITH daily_metrics AS (
+  SELECT
+    date,
+    campaign_name,
+    spend,
+    roas,
+    ctr,
+    conversions,
+    LAG(spend) OVER (PARTITION BY campaign_name ORDER BY date) as prev_spend,
+    LAG(roas) OVER (PARTITION BY campaign_name ORDER BY date) as prev_roas,
+    LAG(ctr) OVER (PARTITION BY campaign_name ORDER BY date) as prev_ctr
+  FROM reporting.campaign_performance
+)
+SELECT
+  date,
+  campaign_name,
+  spend,
+  SAFE_DIVIDE((spend - prev_spend), prev_spend) * 100 as spend_change_pct,
+  SAFE_DIVIDE((roas - prev_roas), prev_roas) * 100 as roas_change_pct,
+  CASE 
+    WHEN SAFE_DIVIDE((spend - prev_spend), prev_spend) > 0.5 THEN 'CRITICAL: Spend spike'
+    WHEN SAFE_DIVIDE((roas - prev_roas), prev_roas) < -0.3 THEN 'CRITICAL: ROAS drop'
+    WHEN conversions = 0 THEN 'WARNING: No conversions'
+    ELSE 'Normal'
+  END as alert_status
+FROM daily_metrics
+WHERE date = CURRENT_DATE()
+  AND alert_status != 'Normal';</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Set Up Zapier Alert Workflow</div>
+                            <div class="tutorial-step-content">
+                                • Create new Zap: "Daily Anomaly Alerts"<br>
+                                • Trigger: Schedule (Every day at 8 AM)<br>
+                                • Action 1: Google Sheets - Get rows (from anomaly results sheet)<br>
+                                • Action 2: Filter - Only continue if rows exist<br>
+                                • Action 3: Formatter - Create formatted message<br>
+                                • Action 4: Slack - Send channel message (#alerts)<br>
+                                • Action 5: Email - Send to account managers
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Create AI-Enhanced Alert Messages</div>
+                            <div class="tutorial-step-content">
+                                • Add Zapier step: OpenAI or Claude API<br>
+                                • Prompt template:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+"Alert detected: {{campaign_name}} has {{alert_status}}
+
+Current metrics:
+- Spend: ${{spend}} ({{spend_change_pct}}% change)
+- ROAS: {{roas}} ({{roas_change_pct}}% change)
+
+Provide:
+1. Most likely cause (1 sentence)
+2. Recommended immediate action (1 sentence)
+3. Urgency level (Low/Medium/High)
+
+Keep response under 100 words."</code>
+                                • Insert AI response into Slack message
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Build Anomaly Dashboard</div>
+                            <div class="tutorial-step-content">
+                                • Create dedicated "Anomaly Monitor" Looker Studio report<br>
+                                • Add real-time data refresh (every 15 minutes)<br>
+                                • Visualizations:<br>
+                                  - Scorecard: # of active alerts<br>
+                                  - Table: All anomalies with severity color coding<br>
+                                  - Time series: Anomaly frequency over time<br>
+                                  - Breakdown: Anomalies by platform/campaign type<br>
+                                • Share with operations team
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Test and Refine</div>
+                            <div class="tutorial-step-content">
+                                • Manually trigger test anomalies (adjust thresholds temporarily)<br>
+                                • Verify alerts are received in Slack and email<br>
+                                • Check AI explanations for accuracy<br>
+                                • Track false positive rate over 2 weeks<br>
+                                • Adjust thresholds based on historical data variance<br>
+                                • Document response procedures for each alert type
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>10. Client-Specific Report Customization<span class="time-badge">⏱ 40 min</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Create Client Profile Database</div>
+                            <div class="tutorial-step-content">
+                                Build Google Sheet: "Client Preferences"<br>
+                                <strong>Columns:</strong><br>
+                                • client_id, client_name, industry<br>
+                                • report_frequency (weekly/biweekly/monthly)<br>
+                                • primary_kpi (ROAS/CPA/Revenue/Conversions)<br>
+                                • communication_style (formal/casual/data-heavy)<br>
+                                • metric_depth (high-level/detailed/technical)<br>
+                                • preferred_delivery (email/Slack/PDF/dashboard)<br>
+                                • brand_color_hex, logo_url
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Build Dynamic Report Template</div>
+                            <div class="tutorial-step-content">
+                                • Create master Looker Studio template<br>
+                                • Add data source: Client Preferences sheet<br>
+                                • Use CASE statements for conditional content:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+CASE 
+  WHEN primary_kpi = 'ROAS' THEN roas
+  WHEN primary_kpi = 'CPA' THEN cpa
+  WHEN primary_kpi = 'Revenue' THEN revenue
+  ELSE conversions
+END as featured_metric</code>
+                                • Apply brand colors from client profile<br>
+                                • Insert logo dynamically using IMAGE() function
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Create AI Tone Adapter</div>
+                            <div class="tutorial-step-content">
+                                • Set up Make.com scenario<br>
+                                • Module 1: Get client communication_style from sheet<br>
+                                • Module 2: Generate executive summary via Claude API<br>
+                                • Prompt with style injection:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+"Write executive summary for {{client_name}}.
+Style: {{communication_style}}
+Metrics: {{campaign_data}}
+
+If formal: Use third-person, professional tone
+If casual: Use conversational, friendly tone  
+If data-heavy: Lead with numbers, minimize prose
+
+Length: 3 paragraphs max"</code>
+                                • Module 3: Insert summary into report
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Configure Metric Depth Filtering</div>
+                            <div class="tutorial-step-content">
+                                In Looker Studio, create filtered views:<br>
+                                <strong>High-level clients:</strong> Show only 5 core KPIs<br>
+                                <strong>Detailed clients:</strong> Show 12 metrics + trends<br>
+                                <strong>Technical clients:</strong> Show all 20+ metrics + SQL queries<br>
+                                <br>
+                                • Use Report Editor → View → Filter<br>
+                                • Create 3 report versions from one template<br>
+                                • Link versions to client_id parameter
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Automate Delivery Based on Preference</div>
+                            <div class="tutorial-step-content">
+                                Create Zapier workflow with branching logic:<br>
+                                • Trigger: Schedule (check client preferences)<br>
+                                • Action 1: Get client delivery preference<br>
+                                • Path A (if email): Generate PDF → Email attachment<br>
+                                • Path B (if Slack): Post dashboard link to client channel<br>
+                                • Path C (if PDF): Upload to Google Drive → Share link<br>
+                                • Path D (if dashboard): Send access link only<br>
+                                • All paths: Log delivery in tracking sheet
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Implement Feedback Loop</div>
+                            <div class="tutorial-step-content">
+                                • Add feedback form link to every report<br>
+                                • Google Form questions:<br>
+                                  - Report clarity (1-5 scale)<br>
+                                  - Metric relevance (1-5 scale)<br>
+                                  - Preferred changes (open text)<br>
+                                  - Preferred frequency (dropdown)<br>
+                                • Automatically update Client Preferences sheet<br>
+                                • Review feedback monthly → Adjust templates<br>
+                                • Track satisfaction scores over time
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>🚀 Advanced Step-by-Steps</h2>
+                <p style="margin-bottom: 12px;">Expert-level tutorials for advanced automation</p>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>11. Predictive Analytics with Python<span class="time-badge">⏱ 120 min</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Set Up Python Environment</div>
+                            <div class="tutorial-step-content">
+                                • Install Python 3.11+ and create virtual environment<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+python -m venv marketing_analytics
+source marketing_analytics/bin/activate  # Mac/Linux
+# or marketing_analytics\Scripts\activate  # Windows
+
+pip install pandas numpy scikit-learn prophet google-cloud-bigquery matplotlib</code>
+                                • Create project folder: predictive_analytics/<br>
+                                • Set up BigQuery authentication (download service account JSON)
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Extract Historical Data from BigQuery</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from google.cloud import bigquery
+import pandas as pd
+
+client = bigquery.Client.from_service_account_json('service-account.json')
+
+query = """
+SELECT 
+  date,
+  SUM(spend) as total_spend,
+  SUM(conversions) as total_conversions,
+  SUM(revenue) as total_revenue
+FROM `marketing_data.reporting.campaign_performance`
+WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 365 DAY)
+GROUP BY date
+ORDER BY date
+"""
+
+df = client.query(query).to_dataframe()
+print(f"Loaded {len(df)} days of data")</code>
+                                • Verify data has no gaps (fill missing dates if needed)<br>
+                                • Save to CSV for backup: df.to_csv('historical_data.csv')
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Build Time Series Forecast Model</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from prophet import Prophet
+
+# Prepare data for Prophet (requires 'ds' and 'y' columns)
+forecast_df = df[['date', 'total_revenue']].rename(
+    columns={'date': 'ds', 'total_revenue': 'y'}
+)
+
+# Initialize and train model
+model = Prophet(
+    yearly_seasonality=True,
+    weekly_seasonality=True,
+    daily_seasonality=False,
+    changepoint_prior_scale=0.05
+)
+model.fit(forecast_df)
+
+# Create future dataframe (next 90 days)
+future = model.make_future_dataframe(periods=90)
+forecast = model.predict(future)
+
+# Extract predictions
+predictions = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(90)
+print(predictions.head())</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Create Budget Optimization Algorithm</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from scipy.optimize import minimize
+
+def calculate_roas(spend, revenue):
+    """Historical ROAS by spend level"""
+    return revenue / spend if spend > 0 else 0
+
+def optimize_budget(total_budget, platforms):
+    """Distribute budget across platforms to maximize ROAS"""
+    
+    def objective(allocations):
+        # Negative ROAS (we minimize, so negate to maximize)
+        total_roas = sum(
+            platforms[i]['roas_function'](allocations[i]) 
+            for i in range(len(platforms))
+        )
+        return -total_roas
+    
+    # Constraints: allocations sum to total_budget
+    constraints = {'type': 'eq', 'fun': lambda x: sum(x) - total_budget}
+    
+    # Bounds: min/max per platform
+    bounds = [(p['min'], p['max']) for p in platforms]
+    
+    # Initial guess: equal distribution
+    x0 = [total_budget / len(platforms)] * len(platforms)
+    
+    result = minimize(objective, x0, bounds=bounds, constraints=constraints)
+    return result.x
+
+# Example usage
+platforms = [
+    {'name': 'Google Ads', 'roas_function': lambda x: 4.5, 'min': 1000, 'max': 10000},
+    {'name': 'Meta Ads', 'roas_function': lambda x: 3.8, 'min': 500, 'max': 8000},
+    {'name': 'LinkedIn', 'roas_function': lambda x: 2.9, 'min': 500, 'max': 5000}
+]
+
+optimal = optimize_budget(20000, platforms)
+for i, platform in enumerate(platforms):
+    print(f"{platform['name']}: ${optimal[i]:.2f}")</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Upload Predictions to BigQuery</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+# Prepare predictions for upload
+upload_df = predictions.rename(columns={
+    'ds': 'forecast_date',
+    'yhat': 'predicted_revenue',
+    'yhat_lower': 'lower_bound',
+    'yhat_upper': 'upper_bound'
+})
+upload_df['model_version'] = 'prophet_v1'
+upload_df['created_at'] = pd.Timestamp.now()
+
+# Upload to BigQuery
+table_id = 'marketing_data.reporting.revenue_forecasts'
+job_config = bigquery.LoadJobConfig(
+    write_disposition="WRITE_TRUNCATE",
+)
+
+job = client.load_table_from_dataframe(
+    upload_df, table_id, job_config=job_config
+)
+job.result()  # Wait for completion
+print(f"Uploaded {len(upload_df)} predictions to {table_id}")</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Automate with Cloud Functions</div>
+                            <div class="tutorial-step-content">
+                                • Create Google Cloud Function (Python 3.11 runtime)<br>
+                                • Add all code from steps 2-5 to main.py<br>
+                                • Set trigger: Cloud Scheduler (daily at 6 AM)<br>
+                                • Configure environment variables for BigQuery project<br>
+                                • Deploy function: <code>gcloud functions deploy forecast-revenue</code><br>
+                                • Test function and monitor logs<br>
+                                • Connect Looker Studio to revenue_forecasts table for visualization
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>12. Custom AI Models for Reporting<span class="time-badge">⏱ 90 min</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Create Training Dataset</div>
+                            <div class="tutorial-step-content">
+                                • Compile 50+ past reports with client feedback<br>
+                                • Extract: Campaign data → Summary → Client rating (1-5)<br>
+                                • Format as JSONL:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+{"messages": [
+  {"role": "system", "content": "You are an expert marketing analyst."},
+  {"role": "user", "content": "Campaign: Spring Sale\nSpend: $5000\nROAS: 4.2\nConversions: 210"},
+  {"role": "assistant", "content": "The Spring Sale campaign delivered strong results with a 4.2 ROAS..."}
+]}
+</code>
+                                • Minimum 100 examples for quality fine-tuning<br>
+                                • Save as training.jsonl
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Fine-Tune Claude or GPT-4</div>
+                            <div class="tutorial-step-content">
+                                <strong>Option A: OpenAI Fine-Tuning</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import openai
+
+# Upload training file
+file = openai.File.create(
+  file=open("training.jsonl", "rb"),
+  purpose='fine-tune'
+)
+
+# Create fine-tuning job
+job = openai.FineTuningJob.create(
+  training_file=file.id,
+  model="gpt-4o-2024-08-06"
+)
+
+# Monitor progress
+print(f"Job ID: {job.id}")
+# Check status: openai.FineTuningJob.retrieve(job.id)</code>
+                                <strong>Option B: Use Claude Prompt Caching</strong><br>
+                                • Store agency-specific examples in system prompt<br>
+                                • Use prompt caching to reduce costs (90% savings)<br>
+                                • No fine-tuning needed, just optimized prompts
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Build Custom API Wrapper</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import anthropic
+
+class AgencyReportGenerator:
+    def __init__(self, api_key):
+        self.client = anthropic.Anthropic(api_key=api_key)
+        self.model = "claude-sonnet-4-20250514"
+    
+    def generate_summary(self, campaign_data, client_style):
+        """Generate client-specific campaign summary"""
+        
+        system_prompt = f"""You are a marketing analyst for [Agency Name].
+        
+Client communication style: {client_style}
+Brand voice: Professional but approachable
+Key metrics priority: ROAS, Conversions, CTR
+
+[Include 10-20 example summaries here for prompt caching]"""
+        
+        message = self.client.messages.create(
+            model=self.model,
+            max_tokens=1000,
+            system=[
+                {
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"}
+                }
+            ],
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Generate summary for:\n{campaign_data}"
+                }
+            ]
+        )
+        
+        return message.content[0].text
+
+# Usage
+generator = AgencyReportGenerator(api_key="your-key")
+summary = generator.generate_summary(campaign_data, "formal")</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Implement Quality Control Layer</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+def validate_summary(summary, campaign_data):
+    """Ensure AI output meets quality standards"""
+    
+    checks = {
+        'length': 50 <= len(summary.split()) <= 200,
+        'has_metrics': any(metric in summary for metric in ['ROAS', 'CPA', 'CTR']),
+        'no_hallucination': all(
+            str(value) in summary 
+            for key, value in campaign_data.items() 
+            if isinstance(value, (int, float))
+        ),
+        'professional_tone': not any(
+            word in summary.lower() 
+            for word in ['amazing', 'terrible', 'awful']
+        )
+    }
+    
+    if not all(checks.values()):
+        failed = [k for k, v in checks.items() if not v]
+        raise ValueError(f"Quality check failed: {failed}")
+    
+    return True</code>
+                                • Add retry logic if validation fails<br>
+                                • Log all generated summaries for review<br>
+                                • Track approval rate over time
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Deploy as Microservice</div>
+                            <div class="tutorial-step-content">
+                                • Create FastAPI application:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.post("/generate-summary")
+async def generate_summary(campaign_data: dict):
+    generator = AgencyReportGenerator(api_key=os.getenv("ANTHROPIC_KEY"))
+    summary = generator.generate_summary(
+        campaign_data, 
+        client_style=campaign_data.get('style', 'professional')
+    )
+    validate_summary(summary, campaign_data)
+    return {"summary": summary}</code>
+                                • Deploy to Cloud Run or Heroku<br>
+                                • Add authentication (API keys)<br>
+                                • Set up monitoring with error alerts
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Integrate with Reporting Pipeline</div>
+                            <div class="tutorial-step-content">
+                                • Update Make.com/Zapier workflow to call your API<br>
+                                • Pass campaign data from BigQuery → Your API → Report<br>
+                                • A/B test: Compare AI summaries vs manual (track client satisfaction)<br>
+                                • Continuously improve with feedback loop:<br>
+                                  - Collect client ratings on AI summaries<br>
+                                  - Retrain/update prompts monthly<br>
+                                  - Monitor token usage and costs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>13. White-Label Report Automation<span class="time-badge">⏱ 80 min</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Create Brand Asset Management System</div>
+                            <div class="tutorial-step-content">
+                                • Set up Google Drive folder: /Client_Branding/<br>
+                                • For each client, create subfolder with:<br>
+                                  - logo.png (transparent background, 500x200px)<br>
+                                  - brand_colors.json (primary, secondary, accent hex codes)<br>
+                                  - typography.json (header font, body font)<br>
+                                  - report_template.pptx (optional custom template)<br>
+                                • Create master spreadsheet: brand_registry.csv<br>
+                                  Columns: client_id, logo_url, primary_color, secondary_color, font_header, font_body
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Build Dynamic PDF Generator</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, Image, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+import pandas as pd
+
+def create_branded_report(client_id, report_data, output_path):
+    # Load brand assets
+    brand = pd.read_csv('brand_registry.csv')
+    client_brand = brand[brand['client_id'] == client_id].iloc[0]
+    
+    # Create PDF
+    doc = SimpleDocTemplate(output_path, pagesize=letter)
+    elements = []
+    
+    # Add logo
+    logo = Image(client_brand['logo_url'], width=200, height=80)
+    elements.append(logo)
+    elements.append(Spacer(1, 30))
+    
+    # Custom styles with brand colors
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        textColor=colors.HexColor(client_brand['primary_color']),
+        fontName=client_brand['font_header']
+    )
+    
+    # Add title
+    title = Paragraph("Marketing Performance Report", title_style)
+    elements.append(title)
+    
+    # Add metrics table
+    table_data = [['Metric', 'Value']] + [
+        [k, v] for k, v in report_data.items()
+    ]
+    table = Table(table_data)
+    table.setStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor(client_brand['primary_color'])),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+    elements.append(table)
+    
+    doc.build(elements)
+    return output_path</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Automate PowerPoint Generation</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from pptx import Presentation
+from pptx.util import Inches, Pt
+from pptx.enum.text import PP_ALIGN
+from pptx.dml.color import RGBColor
+
+def create_branded_pptx(client_id, slides_data, output_path):
+    # Load brand
+    brand = get_client_brand(client_id)
+    
+    # Create presentation
+    prs = Presentation()
+    prs.slide_width = Inches(10)
+    prs.slide_height = Inches(7.5)
+    
+    # Title slide
+    title_slide = prs.slides.add_slide(prs.slide_layouts[6])  # Blank
+    
+    # Add logo
+    logo = title_slide.shapes.add_picture(
+        brand['logo_url'], 
+        Inches(8.5), Inches(0.5), 
+        width=Inches(1.2)
+    )
+    
+    # Add title with brand color
+    title_box = title_slide.shapes.add_textbox(
+        Inches(1), Inches(2), Inches(8), Inches(1)
+    )
+    title_frame = title_box.text_frame
+    title_frame.text = "Q4 Marketing Report"
+    title_para = title_frame.paragraphs[0]
+    title_para.font.size = Pt(44)
+    title_para.font.bold = True
+    title_para.font.color.rgb = RGBColor.from_string(
+        brand['primary_color'].replace('#', '')
+    )
+    
+    # Add data slides
+    for slide_data in slides_data:
+        slide = prs.slides.add_slide(prs.slide_layouts[5])  # Title only
+        # Add charts, tables, text...
+    
+    prs.save(output_path)
+    return output_path</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Implement Multi-Format Export</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+class ReportExporter:
+    def __init__(self, client_id, report_data):
+        self.client_id = client_id
+        self.data = report_data
+        self.brand = get_client_brand(client_id)
+    
+    def export_all_formats(self, output_dir):
+        """Generate PDF, PPTX, and interactive HTML"""
+        outputs = {}
+        
+        # PDF version
+        pdf_path = f"{output_dir}/report_{self.client_id}.pdf"
+        outputs['pdf'] = create_branded_report(
+            self.client_id, self.data, pdf_path
+        )
+        
+        # PowerPoint version
+        pptx_path = f"{output_dir}/report_{self.client_id}.pptx"
+        outputs['pptx'] = create_branded_pptx(
+            self.client_id, self.data, pptx_path
+        )
+        
+        # Interactive HTML dashboard
+        html_path = f"{output_dir}/dashboard_{self.client_id}.html"
+        outputs['html'] = self.create_html_dashboard(html_path)
+        
+        return outputs
+    
+    def create_html_dashboard(self, output_path):
+        """Generate branded HTML dashboard"""
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                :root {{
+                    --primary: {self.brand['primary_color']};
+                    --secondary: {self.brand['secondary_color']};
+                }}
+                /* Add styles... */
+            </style>
+        </head>
+        <body>
+            <img src="{self.brand['logo_url']}" />
+            <!-- Add dashboard content -->
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+        </html>
+        """
+        with open(output_path, 'w') as f:
+            f.write(html)
+        return output_path</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Automate Distribution</div>
+                            <div class="tutorial-step-content">
+                                • Create Zapier/Make.com workflow:<br>
+                                  1. Trigger: Weekly schedule<br>
+                                  2. Action: Call Python API to generate reports<br>
+                                  3. Action: Upload to Google Drive in client folder<br>
+                                  4. Action: Send email with download links<br>
+                                  5. Action: Post to client's Slack channel (if connected)<br>
+                                • Template email with brand-specific signature<br>
+                                • Track download/open rates in Google Analytics
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Scale with Template Library</div>
+                            <div class="tutorial-step-content">
+                                • Build report template library:<br>
+                                  - E-commerce template (revenue focus)<br>
+                                  - Lead gen template (conversion focus)<br>
+                                  - Brand awareness template (impressions focus)<br>
+                                  - SaaS template (MRR, CAC, LTV focus)<br>
+                                • Map each client to template type in database<br>
+                                • Allow template switching via client preference<br>
+                                • Version control all templates in Git<br>
+                                • Test new templates with pilot clients first
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>14. Real-Time Reporting Pipelines<span class="time-badge">⏱ 100 min</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Set Up Data Streaming Infrastructure</div>
+                            <div class="tutorial-step-content">
+                                • Choose streaming platform: Google Pub/Sub or Apache Kafka<br>
+                                <strong>Google Pub/Sub Setup:</strong><br>
+                                • Go to Google Cloud Console → Pub/Sub<br>
+                                • Create topic: "marketing-events"<br>
+                                • Create subscription: "reporting-pipeline"<br>
+                                • Set message retention: 7 days<br>
+                                • Enable authentication via service account<br>
+                                • Note: Real-time = data latency < 5 seconds
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Stream Platform Data via Webhooks</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+from google.cloud import pubsub_v1
+from flask import Flask, request
+import json
+
+app = Flask(__name__)
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path('your-project', 'marketing-events')
+
+@app.route('/webhook/google-ads', methods=['POST'])
+def google_ads_webhook():
+    """Receive conversion events from Google Ads"""
+    event_data = request.json
+    
+    # Transform to standard format
+    standardized = {
+        'timestamp': event_data['conversion_time'],
+        'platform': 'google_ads',
+        'event_type': 'conversion',
+        'campaign_id': event_data['campaign_id'],
+        'value': event_data['conversion_value'],
+        'currency': 'USD'
+    }
+    
+    # Publish to Pub/Sub
+    message_json = json.dumps(standardized)
+    publisher.publish(topic_path, message_json.encode('utf-8'))
+    
+    return {'status': 'received'}, 200
+
+# Similar webhooks for Meta, LinkedIn, etc.
+if __name__ == '__main__':
+    app.run(port=8080)</code>
+                                • Deploy to Cloud Run with public URL<br>
+                                • Configure webhook URLs in ad platforms
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Process Stream with Cloud Functions</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import base64
+import json
+from google.cloud import bigquery
+
+def process_event(event, context):
+    """Triggered by Pub/Sub message"""
+    
+    # Decode message
+    message_data = base64.b64decode(event['data']).decode('utf-8')
+    event_json = json.loads(message_data)
+    
+    # Aggregate in-memory (use Redis for production)
+    # For this example, write directly to BigQuery streaming
+    
+    client = bigquery.Client()
+    table_id = 'marketing_data.realtime.events'
+    
+    rows_to_insert = [{
+        'timestamp': event_json['timestamp'],
+        'platform': event_json['platform'],
+        'event_type': event_json['event_type'],
+        'campaign_id': event_json['campaign_id'],
+        'value': event_json['value']
+    }]
+    
+    errors = client.insert_rows_json(table_id, rows_to_insert)
+    
+    if errors:
+        print(f"Errors: {errors}")
+    else:
+        print(f"Inserted event: {event_json['event_type']}")
+        
+    # Check for anomalies in real-time
+    check_realtime_anomalies(event_json)</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Build Real-Time Aggregation Layer</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+-- Create materialized view for 5-minute rolling metrics
+CREATE MATERIALIZED VIEW marketing_data.realtime.rolling_5min AS
+SELECT
+  TIMESTAMP_TRUNC(timestamp, MINUTE, 5) as window_start,
+  platform,
+  campaign_id,
+  COUNT(*) as event_count,
+  SUM(value) as total_value,
+  AVG(value) as avg_value
+FROM marketing_data.realtime.events
+WHERE timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)
+GROUP BY window_start, platform, campaign_id;
+
+-- Schedule refresh every 1 minute
+-- (BigQuery materialized views auto-refresh)</code>
+                                • Alternative: Use Dataflow for complex stream processing<br>
+                                • For very high volume: Consider ClickHouse or Apache Druid
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Create Live Dashboard</div>
+                            <div class="tutorial-step-content">
+                                • Build with Streamlit or Dash for Python<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import streamlit as st
+import pandas as pd
+from google.cloud import bigquery
+import time
+
+st.set_page_config(page_title="Real-Time Dashboard", layout="wide")
+
+# Auto-refresh every 10 seconds
+placeholder = st.empty()
+
+while True:
+    with placeholder.container():
+        st.title("Real-Time Campaign Monitor")
+        
+        # Fetch latest data
+        client = bigquery.Client()
+        query = """
+        SELECT * FROM `marketing_data.realtime.rolling_5min`
+        WHERE window_start >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)
+        ORDER BY window_start DESC
+        """
+        df = client.query(query).to_dataframe()
+        
+        # Display metrics
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Events (last 5 min)", df.iloc[0]['event_count'])
+        col2.metric("Total Value", f"${df.iloc[0]['total_value']:,.2f}")
+        col3.metric("Avg Value", f"${df.iloc[0]['avg_value']:.2f}")
+        
+        # Line chart
+        st.line_chart(df.set_index('window_start')['total_value'])
+        
+    time.sleep(10)  # Refresh every 10 seconds</code>
+                                • Deploy to Streamlit Cloud or Cloud Run<br>
+                                • Add WebSocket support for instant updates
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Implement Real-Time Alerts</div>
+                            <div class="tutorial-step-content">
+                                • Create alert function triggered by stream:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+def check_realtime_anomalies(event):
+    """Check for immediate issues"""
+    
+    # Get 5-min average
+    recent_avg = get_recent_average(event['campaign_id'], minutes=5)
+    
+    # Alert conditions
+    if event['value'] == 0 and recent_avg > 0:
+        send_alert(
+            "CRITICAL: Zero-value conversion detected",
+            f"Campaign {event['campaign_id']} just had 0-value conversion"
+        )
+    
+    if event['value'] > recent_avg * 3:
+        send_alert(
+            "ANOMALY: High-value conversion",
+            f"Campaign {event['campaign_id']}: ${event['value']} (3x normal)"
+        )
+
+def send_alert(title, message):
+    # Send to Slack
+    slack_webhook_url = "your-webhook-url"
+    payload = {"text": f"*{title}*\n{message}"}
+    requests.post(slack_webhook_url, json=payload)</code>
+                                • Monitor stream health and data freshness<br>
+                                • Set up dead letter queue for failed events
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>15. ROI Calculator & Budget Optimizer Tool<span class="time-badge">⏱ 70 min</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Design Calculator Interface</div>
+                            <div class="tutorial-step-content">
+                                • Create React component or Streamlit app<br>
+                                <strong>Required Inputs:</strong><br>
+                                • Total marketing budget<br>
+                                • Current platform allocations (Google, Meta, LinkedIn, etc.)<br>
+                                • Target ROAS or CPA<br>
+                                • Historical performance data (last 90 days)<br>
+                                • Business constraints (min/max per platform)<br>
+                                <strong>Outputs:</strong><br>
+                                • Optimized budget allocation<br>
+                                • Expected revenue increase<br>
+                                • Risk assessment<br>
+                                • What-if scenarios
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Build Optimization Algorithm</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import numpy as np
+from scipy.optimize import minimize
+import pandas as pd
+
+class BudgetOptimizer:
+    def __init__(self, historical_data):
+        self.data = historical_data
+        self.platform_models = self.fit_response_curves()
+    
+    def fit_response_curves(self):
+        """Fit diminishing returns curve for each platform"""
+        models = {}
+        
+        for platform in self.data['platform'].unique():
+            platform_data = self.data[self.data['platform'] == platform]
+            
+            # Fit logarithmic model: revenue = a * log(spend) + b
+            from sklearn.linear_model import LinearRegression
+            X = np.log(platform_data['spend'].values.reshape(-1, 1))
+            y = platform_data['revenue'].values
+            
+            model = LinearRegression()
+            model.fit(X, y)
+            models[platform] = model
+        
+        return models
+    
+    def predict_revenue(self, platform, spend):
+        """Predict revenue for given spend"""
+        if spend <= 0:
+            return 0
+        model = self.platform_models[platform]
+        return model.predict([[np.log(spend)]])[0]
+    
+    def optimize(self, total_budget, constraints):
+        """Find optimal allocation"""
+        platforms = list(self.platform_models.keys())
+        n = len(platforms)
+        
+        def objective(x):
+            # Maximize total revenue (minimize negative)
+            total_revenue = sum(
+                self.predict_revenue(platforms[i], x[i])
+                for i in range(n)
+            )
+            return -total_revenue
+        
+        # Constraints
+        cons = [
+            {'type': 'eq', 'fun': lambda x: sum(x) - total_budget},
+            # Add min/max constraints from input
+        ]
+        
+        bounds = [(c['min'], c['max']) for c in constraints]
+        x0 = [total_budget / n] * n  # Initial guess
+        
+        result = minimize(objective, x0, bounds=bounds, constraints=cons)
+        
+        return {
+            'allocations': dict(zip(platforms, result.x)),
+            'expected_revenue': -result.fun,
+            'expected_roas': -result.fun / total_budget
+        }</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Add Scenario Analysis</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+def run_scenarios(optimizer, base_budget):
+    """Test multiple budget scenarios"""
+    scenarios = {
+        'conservative': base_budget * 0.8,
+        'baseline': base_budget,
+        'aggressive': base_budget * 1.2,
+        'maximum': base_budget * 1.5
+    }
+    
+    results = {}
+    for name, budget in scenarios.items():
+        optimization = optimizer.optimize(budget, constraints)
+        results[name] = {
+            'budget': budget,
+            'allocation': optimization['allocations'],
+            'expected_revenue': optimization['expected_revenue'],
+            'expected_roas': optimization['expected_roas'],
+            'roi': (optimization['expected_revenue'] - budget) / budget * 100
+        }
+    
+    return pd.DataFrame(results).T</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Create Interactive Visualization</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import plotly.graph_objects as go
+
+def visualize_optimization(current, optimized):
+    """Show current vs optimized allocation"""
+    
+    platforms = list(current.keys())
+    
+    fig = go.Figure(data=[
+        go.Bar(name='Current', x=platforms, y=list(current.values())),
+        go.Bar(name='Optimized', x=platforms, y=list(optimized.values()))
+    ])
+    
+    fig.update_layout(
+        title='Budget Allocation: Current vs Optimized',
+        xaxis_title='Platform',
+        yaxis_title='Budget ($)',
+        barmode='group'
+    )
+    
+    return fig
+
+# Waterfall chart showing revenue impact
+def show_revenue_impact(scenarios_df):
+    fig = go.Figure(go.Waterfall(
+        x=scenarios_df.index,
+        y=scenarios_df['expected_revenue'],
+        text=scenarios_df['expected_revenue'].apply(lambda x: f'${x:,.0f}')
+    ))
+    
+    fig.update_layout(title='Revenue by Scenario')
+    return fig</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Deploy as Client-Facing Tool</div>
+                            <div class="tutorial-step-content">
+                                • Build Streamlit app with sidebar inputs:<br>
+                                  - Budget slider<br>
+                                  - Platform checkboxes<br>
+                                  - Target ROAS input<br>
+                                • Main area shows:<br>
+                                  - Current vs optimized allocation charts<br>
+                                  - Scenario comparison table<br>
+                                  - Expected outcomes metrics<br>
+                                  - Download recommendations as PDF<br>
+                                • Deploy to streamlit.io or custom domain<br>
+                                • Password-protect for client access<br>
+                                • Track usage analytics
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Integrate with Live Data</div>
+                            <div class="tutorial-step-content">
+                                • Connect to BigQuery for real-time data:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+@st.cache_data(ttl=3600)  # Cache for 1 hour
+def load_historical_data():
+    client = bigquery.Client()
+    query = """
+    SELECT 
+        platform,
+        date,
+        SUM(spend) as spend,
+        SUM(revenue) as revenue
+    FROM `marketing_data.reporting.campaign_performance`
+    WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY)
+    GROUP BY platform, date
+    """
+    return client.query(query).to_dataframe()</code>
+                                • Auto-update recommendations weekly<br>
+                                • Send email alerts when significant optimization opportunities detected<br>
+                                • Version control recommendations for audit trail
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>⚙️ Practical Workflows</h2>
+                <p style="margin-bottom: 12px;">Ready-to-implement workflow templates</p>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>16. Weekly Reporting Workflow (Monday → Friday)<span class="time-badge">⏱ 45 min setup</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Monday 6:00 AM - Data Collection</div>
+                            <div class="tutorial-step-content">
+                                <strong>Zapier Workflow Part 1:</strong><br>
+                                • Trigger: Schedule by Zapier - Every Monday at 6:00 AM<br>
+                                • Action 1: Supermetrics - Refresh all data sources<br>
+                                  - Google Ads (last 7 days)<br>
+                                  - Meta Ads (last 7 days)<br>
+                                  - LinkedIn Ads (last 7 days)<br>
+                                  - GA4 (last 7 days)<br>
+                                • Action 2: Google Sheets - Append timestamp to log sheet<br>
+                                • Action 3: Delay - Wait 15 minutes for data to populate<br>
+                                <br>
+                                <strong>Backup/Validation:</strong><br>
+                                • Check data completeness (no missing dates)<br>
+                                • Verify spend totals match platform dashboards (±5%)
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Monday 6:30 AM - Data Transformation</div>
+                            <div class="tutorial-step-content">
+                                <strong>BigQuery Scheduled Query:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+-- Runs at 6:30 AM every Monday
+CREATE OR REPLACE TABLE reporting.weekly_summary AS
+SELECT
+  DATE_TRUNC(date, WEEK) as week_start,
+  platform,
+  campaign_name,
+  SUM(impressions) as impressions,
+  SUM(clicks) as clicks,
+  SUM(spend) as spend,
+  SUM(conversions) as conversions,
+  SUM(revenue) as revenue,
+  SAFE_DIVIDE(SUM(revenue), SUM(spend)) as roas,
+  SAFE_DIVIDE(SUM(clicks), SUM(impressions)) * 100 as ctr
+FROM raw_data.unified_platform_data
+WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+GROUP BY week_start, platform, campaign_name;</code>
+                                • Query runs automatically<br>
+                                • Email notification on failure
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Monday 7:00 AM - AI Analysis Generation</div>
+                            <div class="tutorial-step-content">
+                                <strong>Make.com Scenario:</strong><br>
+                                • Module 1: Google Sheets - Get weekly summary data<br>
+                                • Module 2: Iterator - Loop through each client<br>
+                                • Module 3: Claude API - Generate insights<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+Prompt: "Analyze this week's performance for {{client_name}}:
+{{campaign_data}}
+
+Provide:
+1. Top 3 wins with specific metrics
+2. Top 2 concerns with recommendations
+3. One strategic suggestion for next week
+
+Keep under 200 words, professional tone."</code>
+                                • Module 4: Google Docs - Create draft report per client<br>
+                                • Module 5: Store AI response in database for review
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Tuesday-Thursday - Human Review & Refinement</div>
+                            <div class="tutorial-step-content">
+                                <strong>Account Manager Tasks:</strong><br>
+                                • Review AI-generated insights (30 min per client)<br>
+                                • Add context-specific commentary<br>
+                                • Update strategic recommendations<br>
+                                • Flag any data anomalies for investigation<br>
+                                • Approve reports in tracking sheet<br>
+                                <br>
+                                <strong>Quality Checklist:</strong><br>
+                                ☐ All metrics accurate vs platform dashboards<br>
+                                ☐ AI insights make business sense<br>
+                                ☐ Recommendations are actionable<br>
+                                ☐ Client-specific context included<br>
+                                ☐ No jargon or unclear terms
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Friday 9:00 AM - Final Report Generation</div>
+                            <div class="tutorial-step-content">
+                                <strong>Automated Final Assembly:</strong><br>
+                                • Trigger: Schedule - Every Friday at 9:00 AM<br>
+                                • Filter: Only approved reports (status = "approved")<br>
+                                • For each client:<br>
+                                  1. Generate branded PDF from Google Doc<br>
+                                  2. Create PowerPoint version (if requested)<br>
+                                  3. Update Looker Studio dashboard<br>
+                                  4. Upload files to client's Google Drive folder<br>
+                                  5. Mark as "ready for delivery"
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Friday 10:00 AM - Client Delivery</div>
+                            <div class="tutorial-step-content">
+                                <strong>Multi-Channel Distribution:</strong><br>
+                                • Email clients with:<br>
+                                  - Personalized message (template with merge fields)<br>
+                                  - PDF attachment OR dashboard link<br>
+                                  - Calendar invite for review call (if scheduled)<br>
+                                • Post to client Slack channels (if applicable)<br>
+                                • Send SMS notification to key stakeholders (optional)<br>
+                                • Log delivery in CRM<br>
+                                <br>
+                                <strong>Tracking:</strong><br>
+                                • Monitor email open rates<br>
+                                • Track dashboard views (GA4)<br>
+                                • Set reminder for follow-up on Monday
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>17. Crisis Management Protocol<span class="time-badge">⏱ 30 min setup</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Define Crisis Scenarios</div>
+                            <div class="tutorial-step-content">
+                                <strong>Level 1 - CRITICAL (Immediate Action):</strong><br>
+                                • Campaign spend >200% of daily budget<br>
+                                • Account suspension/ban<br>
+                                • ROAS drop >50% in single day<br>
+                                • Zero conversions for 24+ hours on active campaign<br>
+                                • Negative PR trending on social<br>
+                                <br>
+                                <strong>Level 2 - URGENT (Action within 2 hours):</strong><br>
+                                • Spend increase 100-200% of daily budget<br>
+                                • ROAS drop 30-50%<br>
+                                • CTR drop >40%<br>
+                                • Major competitor launch detected<br>
+                                <br>
+                                <strong>Level 3 - WARNING (Review within 24h):</strong><br>
+                                • Spend increase 50-100%<br>
+                                • ROAS drop 15-30%<br>
+                                • Quality score drops
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Set Up Real-Time Monitoring</div>
+                            <div class="tutorial-step-content">
+                                <strong>BigQuery Monitoring Query (runs every 15 min):</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+CREATE OR REPLACE TABLE monitoring.crisis_alerts AS
+WITH today_metrics AS (
+  SELECT
+    campaign_id,
+    campaign_name,
+    platform,
+    SUM(spend) as today_spend,
+    AVG(roas) as today_roas,
+    AVG(ctr) as today_ctr,
+    SUM(conversions) as today_conversions
+  FROM realtime.events
+  WHERE DATE(timestamp) = CURRENT_DATE()
+  GROUP BY campaign_id, campaign_name, platform
+),
+avg_metrics AS (
+  SELECT
+    campaign_id,
+    AVG(daily_spend) as avg_spend,
+    AVG(roas) as avg_roas,
+    AVG(ctr) as avg_ctr
+  FROM reporting.campaign_performance
+  WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+  GROUP BY campaign_id
+)
+SELECT
+  t.campaign_id,
+  t.campaign_name,
+  t.platform,
+  t.today_spend,
+  a.avg_spend,
+  (t.today_spend - a.avg_spend) / a.avg_spend * 100 as spend_change_pct,
+  (t.today_roas - a.avg_roas) / a.avg_roas * 100 as roas_change_pct,
+  CASE
+    WHEN t.today_spend > a.avg_spend * 3 THEN 'LEVEL_1'
+    WHEN t.today_roas < a.avg_roas * 0.5 THEN 'LEVEL_1'
+    WHEN t.today_conversions = 0 THEN 'LEVEL_1'
+    WHEN t.today_spend > a.avg_spend * 2 THEN 'LEVEL_2'
+    WHEN t.today_roas < a.avg_roas * 0.7 THEN 'LEVEL_2'
+    WHEN t.today_spend > a.avg_spend * 1.5 THEN 'LEVEL_3'
+    ELSE 'NORMAL'
+  END as alert_level
+FROM today_metrics t
+JOIN avg_metrics a USING(campaign_id)
+WHERE alert_level != 'NORMAL';</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Automated Alert Escalation</div>
+                            <div class="tutorial-step-content">
+                                <strong>Zapier Crisis Workflow:</strong><br>
+                                • Trigger: Google Sheets - New row in crisis_alerts<br>
+                                • Filter: alert_level is not empty<br>
+                                • Action 1: Claude API - Analyze situation<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+"CRISIS ALERT for {{campaign_name}}:
+Issue: {{alert_level}}
+Spend change: {{spend_change_pct}}%
+ROAS change: {{roas_change_pct}}%
+
+Provide:
+1. Most likely root cause
+2. Immediate action to take (pause/adjust/investigate)
+3. Who to notify (account manager/client/both)
+4. Estimated impact if no action taken
+
+Be direct and actionable. 100 words max."</code>
+                                • Action 2a (if LEVEL_1): SMS to on-call manager<br>
+                                • Action 2b (if LEVEL_1): Slack message to #emergencies<br>
+                                • Action 2c (if LEVEL_1): Create PagerDuty incident<br>
+                                • Action 3 (all levels): Email detailed report<br>
+                                • Action 4: Create Jira ticket with AI analysis
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Automated Incident Response</div>
+                            <div class="tutorial-step-content">
+                                <strong>Smart Pause Rules (optional but powerful):</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+# Python Cloud Function
+def auto_respond_to_crisis(alert_data):
+    """Take automated action based on crisis level"""
+    
+    if alert_data['alert_level'] == 'LEVEL_1':
+        if alert_data['spend_change_pct'] > 200:
+            # Automatically pause campaign
+            pause_campaign(alert_data['campaign_id'])
+            notify_team(f"AUTO-PAUSED: {alert_data['campaign_name']}")
+            log_action('auto_pause', alert_data)
+        
+        if alert_data['today_conversions'] == 0:
+            # Don't auto-pause, but create urgent ticket
+            create_urgent_ticket(alert_data)
+    
+    elif alert_data['alert_level'] == 'LEVEL_2':
+        # Reduce budget by 50% automatically
+        reduce_budget(alert_data['campaign_id'], 0.5)
+        notify_team(f"BUDGET CUT 50%: {alert_data['campaign_name']}")
+    
+    return {'action_taken': True}</code>
+                                <strong>Safety Rules:</strong><br>
+                                • Only auto-pause if spend >300% AND after 12 PM<br>
+                                • Never auto-pause on weekends (manual review required)<br>
+                                • Send confirmation within 60 seconds of auto-action<br>
+                                • Allow manual override within 15 minutes
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Incident Documentation</div>
+                            <div class="tutorial-step-content">
+                                <strong>Auto-Generate Incident Report:</strong><br>
+                                • Create Google Doc template<br>
+                                • Populate with:<br>
+                                  - Incident timestamp and severity<br>
+                                  - Affected campaigns/clients<br>
+                                  - Detected metrics and changes<br>
+                                  - AI analysis and recommendations<br>
+                                  - Actions taken (auto or manual)<br>
+                                  - Resolution time<br>
+                                  - Root cause (fill after investigation)<br>
+                                  - Prevention steps for future<br>
+                                • Share with team in Slack thread<br>
+                                • Update CRM with incident tag<br>
+                                • Schedule post-mortem review (if LEVEL_1)
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Client Communication Protocol</div>
+                            <div class="tutorial-step-content">
+                                <strong>When to notify client:</strong><br>
+                                • LEVEL_1: Always within 1 hour<br>
+                                • LEVEL_2: If issue persists >4 hours<br>
+                                • LEVEL_3: Only if impacts deliverables<br>
+                                <br>
+                                <strong>Communication Template:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+Subject: [CLIENT] - Performance Alert & Action Taken
+
+Hi [Client Name],
+
+We detected an unusual pattern in your [Campaign Name]:
+• [Metric] changed by [X%] today
+• We immediately [action taken]
+
+Current status: [Resolved/Monitoring/Investigating]
+
+Next steps:
+1. [Action 1]
+2. [Action 2]
+
+Expected resolution: [timeframe]
+
+We'll update you within [X hours] or sooner if resolved.
+
+Questions? Reply or call [emergency number].
+
+Best,
+[Your name]</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>18. Competitive Analysis Automation<span class="time-badge">⏱ 60 min setup</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Set Up Competitor Monitoring Tools</div>
+                            <div class="tutorial-step-content">
+                                <strong>Data Sources to Configure:</strong><br>
+                                • SEMrush API - Competitor ad spend & keywords<br>
+                                • SpyFu API - Historical ad copy tracking<br>
+                                • SimilarWeb API - Traffic estimates<br>
+                                • Meta Ad Library - Active ad creative scraping<br>
+                                • Google Ads Auction Insights - Direct competition data<br>
+                                <br>
+                                <strong>Setup:</strong><br>
+                                • Create API keys for each service<br>
+                                • Define competitor list per client (3-5 competitors)<br>
+                                • Store in Google Sheet: competitor_tracking.csv
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Daily Competitor Data Collection</div>
+                            <div class="tutorial-step-content">
+                                <strong>Make.com Workflow - Runs Daily at 8 AM:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+Module 1: Iterator - Loop through competitor list
+
+Module 2: HTTP - SEMrush API Call
+GET https://api.semrush.com/?type=domain_overview
+&key={{api_key}}
+&domain={{competitor_domain}}
+&database=us
+
+Extract:
+- organic_keywords
+- paid_keywords  
+- paid_traffic_cost
+- ads_count
+
+Module 3: HTTP - Meta Ad Library API
+Search for: {{competitor_brand_name}}
+Extract:
+- active_ads_count
+- new_ads_last_7_days
+- ad_creative_urls
+
+Module 4: Google Sheets - Append Data
+Sheet: competitor_daily_metrics
+Columns: date, competitor, paid_keywords, ad_spend_est, active_ads</code>
+                                • Set retry logic for failed API calls<br>
+                                • Alert if competitor data unavailable >2 days
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Automated Insight Generation</div>
+                            <div class="tutorial-step-content">
+                                <strong>Weekly Analysis - Every Monday:</strong><br>
+                                • Query BigQuery for week-over-week changes<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+WITH this_week AS (
+  SELECT competitor, AVG(paid_keywords) as avg_keywords
+  FROM competitor_daily_metrics
+  WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+  GROUP BY competitor
+),
+last_week AS (
+  SELECT competitor, AVG(paid_keywords) as avg_keywords
+  FROM competitor_daily_metrics  
+  WHERE date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 14 DAY)
+    AND DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+  GROUP BY competitor
+)
+SELECT
+  t.competitor,
+  t.avg_keywords as this_week_keywords,
+  l.avg_keywords as last_week_keywords,
+  (t.avg_keywords - l.avg_keywords) / l.avg_keywords * 100 as change_pct
+FROM this_week t
+JOIN last_week l USING(competitor)
+WHERE ABS((t.avg_keywords - l.avg_keywords) / l.avg_keywords * 100) > 10;</code>
+                                <br>
+                                • Pass results to Claude API for analysis<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+"Competitor intelligence update:
+{{competitor_changes_data}}
+
+Analyze:
+1. Which competitors are ramping up (keyword increases >20%)
+2. Which are pulling back (decreases >20%)
+3. What this means for our client's strategy
+4. Recommended response actions
+
+Keep under 150 words, strategic focus."</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Ad Creative Monitoring</div>
+                            <div class="tutorial-step-content">
+                                <strong>Meta Ad Library Scraper:</strong><br>
+                                • Use Apify or custom Puppeteer script<br>
+                                • Daily check for new competitor ads<br>
+                                • Download creative images/videos<br>
+                                • Extract ad copy text<br>
+                                • Store in organized folder structure:<br>
+                                  /competitor_ads/CompanyA/2026-01-31/<br>
+                                <br>
+                                <strong>AI Analysis of Ad Copy:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+"Analyze these competitor ad copies:
+{{ad_copy_list}}
+
+Identify:
+1. Common messaging themes
+2. Offer types (discount %, free trial, etc.)
+3. CTAs being used
+4. Emotional appeals
+5. What's different from our client's approach
+
+Suggest 2 ad copy improvements for our client based on this."</code>
+                                • Store insights in competitive_intel database
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Create Competitive Dashboard</div>
+                            <div class="tutorial-step-content">
+                                <strong>Looker Studio Competitive Intelligence Report:</strong><br>
+                                • Data source: competitor_daily_metrics table<br>
+                                • Page 1 - Overview:<br>
+                                  - Scorecard: # of competitors tracked<br>
+                                  - Line chart: Estimated spend trends (all competitors)<br>
+                                  - Table: Top movers (biggest % changes this week)<br>
+                                • Page 2 - Keyword Analysis:<br>
+                                  - Bar chart: Paid keyword count by competitor<br>
+                                  - Heatmap: Keyword overlap with client<br>
+                                  - Table: New keywords by competitor (last 7 days)<br>
+                                • Page 3 - Ad Creative Trends:<br>
+                                  - Gallery: Recent competitor ad screenshots<br>
+                                  - Word cloud: Common ad copy themes<br>
+                                  - Timeline: Ad launch frequency<br>
+                                • Auto-refresh daily at 9 AM<br>
+                                • Share view-only link with client quarterly
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Strategic Alert System</div>
+                            <div class="tutorial-step-content">
+                                <strong>Trigger Alerts When:</strong><br>
+                                • Competitor launches 10+ new ads in one day<br>
+                                • Competitor's estimated spend increases >50%<br>
+                                • New competitor enters the space (new domain detected)<br>
+                                • Competitor disappears (no ads for 7+ days)<br>
+                                • Client's share of voice drops >15%<br>
+                                <br>
+                                <strong>Alert Delivery:</strong><br>
+                                • Slack message to #competitive-intel channel<br>
+                                • Email digest (weekly summary) to account managers<br>
+                                • Monthly deep-dive report with AI recommendations<br>
+                                • Add to client's next report if significant<br>
+                                <br>
+                                <strong>Action Items:</strong><br>
+                                • Review competitor changes in weekly team meeting<br>
+                                • Update client strategy doc with competitive insights<br>
+                                • Test winning competitor approaches (A/B test)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>19. Multi-Channel Attribution Tracking<span class="time-badge">⏱ 90 min setup</span><span class="difficulty-badge">★★★ Advanced</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Set Up Enhanced Tracking</div>
+                            <div class="tutorial-step-content">
+                                <strong>GA4 Configuration:</strong><br>
+                                • Enable User-ID tracking in GA4<br>
+                                • Set up custom dimensions:<br>
+                                  - utm_campaign (event-scoped)<br>
+                                  - utm_source (event-scoped)<br>
+                                  - utm_medium (event-scoped)<br>
+                                  - first_touch_campaign (user-scoped)<br>
+                                  - last_touch_campaign (user-scoped)<br>
+                                • Configure conversions events:<br>
+                                  - purchase, lead_submit, signup, etc.<br>
+                                <br>
+                                <strong>UTM Parameter Standards:</strong><br>
+                                • Create UTM naming convention doc<br>
+                                • Example: utm_campaign=summer_sale_2026_prospecting<br>
+                                • Use UTM builder tool for consistency<br>
+                                • Store all UTM templates in shared spreadsheet
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Build Customer Journey Table</div>
+                            <div class="tutorial-step-content">
+                                <strong>BigQuery Journey Mapping:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+-- Export GA4 data to BigQuery daily
+-- Then create journey view:
+
+CREATE OR REPLACE TABLE attribution.customer_journeys AS
+WITH user_events AS (
+  SELECT
+    user_pseudo_id,
+    event_timestamp,
+    event_name,
+    (SELECT value.string_value FROM UNNEST(event_params) 
+     WHERE key = 'source') as source,
+    (SELECT value.string_value FROM UNNEST(event_params) 
+     WHERE key = 'medium') as medium,
+    (SELECT value.string_value FROM UNNEST(event_params) 
+     WHERE key = 'campaign') as campaign,
+    (SELECT value.int_value FROM UNNEST(event_params) 
+     WHERE key = 'value') as event_value
+  FROM `analytics_XXXXXX.events_*`
+  WHERE _TABLE_SUFFIX >= FORMAT_DATE('%Y%m%d', DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY))
+),
+conversion_events AS (
+  SELECT * FROM user_events
+  WHERE event_name IN ('purchase', 'lead_submit', 'signup')
+),
+journey_paths AS (
+  SELECT
+    c.user_pseudo_id,
+    c.event_timestamp as conversion_timestamp,
+    c.event_value as conversion_value,
+    ARRAY_AGG(
+      STRUCT(
+        u.event_timestamp,
+        u.source,
+        u.medium,
+        u.campaign
+      ) ORDER BY u.event_timestamp
+    ) as touchpoints
+  FROM conversion_events c
+  JOIN user_events u 
+    ON c.user_pseudo_id = u.user_pseudo_id
+    AND u.event_timestamp <= c.event_timestamp
+  GROUP BY c.user_pseudo_id, c.event_timestamp, c.event_value
+)
+SELECT * FROM journey_paths;</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Implement Attribution Models</div>
+                            <div class="tutorial-step-content">
+                                <strong>Multiple Attribution Models:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+-- 1. Last-Click Attribution
+CREATE OR REPLACE TABLE attribution.last_click AS
+SELECT
+  touchpoints[ORDINAL(ARRAY_LENGTH(touchpoints))].campaign as campaign,
+  COUNT(*) as conversions,
+  SUM(conversion_value) as revenue
+FROM attribution.customer_journeys
+GROUP BY campaign;
+
+-- 2. First-Click Attribution  
+CREATE OR REPLACE TABLE attribution.first_click AS
+SELECT
+  touchpoints[ORDINAL(1)].campaign as campaign,
+  COUNT(*) as conversions,
+  SUM(conversion_value) as revenue
+FROM attribution.customer_journeys
+GROUP BY campaign;
+
+-- 3. Linear Attribution (equal credit to all)
+CREATE OR REPLACE TABLE attribution.linear AS
+SELECT
+  tp.campaign,
+  COUNT(*) / ARRAY_LENGTH(j.touchpoints) as conversions,
+  SUM(j.conversion_value) / ARRAY_LENGTH(j.touchpoints) as revenue
+FROM attribution.customer_journeys j,
+UNNEST(touchpoints) as tp
+GROUP BY tp.campaign;
+
+-- 4. Time-Decay Attribution (more credit to recent)
+CREATE OR REPLACE TABLE attribution.time_decay AS
+WITH weighted_touchpoints AS (
+  SELECT
+    j.user_pseudo_id,
+    j.conversion_value,
+    tp.campaign,
+    POW(0.5, 
+      (j.conversion_timestamp - tp.event_timestamp) / (7 * 24 * 60 * 60 * 1000000)
+    ) as weight
+  FROM attribution.customer_journeys j,
+  UNNEST(touchpoints) as tp
+)
+SELECT
+  campaign,
+  SUM(weight) as weighted_conversions,
+  SUM(conversion_value * weight / SUM(weight) OVER (PARTITION BY user_pseudo_id)) as revenue
+FROM weighted_touchpoints
+GROUP BY campaign;</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Compare Attribution Models</div>
+                            <div class="tutorial-step-content">
+                                <strong>Attribution Comparison Dashboard:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+-- Unified view of all models
+CREATE OR REPLACE TABLE attribution.model_comparison AS
+SELECT
+  'Last-Click' as model,
+  campaign,
+  conversions,
+  revenue
+FROM attribution.last_click
+UNION ALL
+SELECT
+  'First-Click' as model,
+  campaign,
+  conversions,
+  revenue
+FROM attribution.first_click
+UNION ALL
+SELECT
+  'Linear' as model,
+  campaign,
+  conversions,
+  revenue
+FROM attribution.linear
+UNION ALL
+SELECT
+  'Time-Decay' as model,
+  campaign,
+  weighted_conversions as conversions,
+  revenue
+FROM attribution.time_decay;</code>
+                                <br>
+                                • Create Looker Studio report:<br>
+                                  - Table: Campaign performance by model<br>
+                                  - Chart: Revenue attribution difference by model<br>
+                                  - Pivot: Which campaigns benefit from each model<br>
+                                • Update weekly
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Journey Visualization</div>
+                            <div class="tutorial-step-content">
+                                <strong>Sankey Diagram of Customer Journeys:</strong><br>
+                                • Use Python + Plotly to create flow visualization<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import plotly.graph_objects as go
+from google.cloud import bigquery
+
+# Get journey paths
+client = bigquery.Client()
+query = """
+SELECT 
+  touchpoints[ORDINAL(1)].campaign as first_touch,
+  touchpoints[ORDINAL(2)].campaign as second_touch,
+  COUNT(*) as journey_count
+FROM attribution.customer_journeys
+WHERE ARRAY_LENGTH(touchpoints) >= 2
+GROUP BY first_touch, second_touch
+ORDER BY journey_count DESC
+LIMIT 20
+"""
+df = client.query(query).to_dataframe()
+
+# Create Sankey
+fig = go.Figure(data=[go.Sankey(
+    node=dict(label=list(set(df['first_touch'].tolist() + df['second_touch'].tolist()))),
+    link=dict(
+        source=[...],  # Map campaigns to node indices
+        target=[...],
+        value=df['journey_count'].tolist()
+    )
+)])
+
+fig.update_layout(title="Customer Journey Paths")
+fig.write_html("journey_sankey.html")</code>
+                                • Embed in Looker Studio using iframe<br>
+                                • Update monthly
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Automated Attribution Reporting</div>
+                            <div class="tutorial-step-content">
+                                <strong>Weekly Attribution Insights:</strong><br>
+                                • Schedule BigQuery queries to refresh all attribution tables<br>
+                                • Generate Claude AI analysis:<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+"Attribution analysis for {{client_name}}:
+
+Last-Click top campaigns: {{last_click_top_3}}
+First-Click top campaigns: {{first_click_top_3}}
+Biggest model discrepancy: {{biggest_difference}}
+
+Analyze:
+1. Which campaigns are undervalued in last-click?
+2. Are we over-investing in last-touch campaigns?
+3. Which top-of-funnel campaigns deserve more budget?
+4. Recommended attribution model for this client
+
+Strategic, 200 words max."</code>
+                                • Include in monthly strategy review<br>
+                                • Adjust budgets based on chosen model<br>
+                                • Track ROAS improvement from attribution-based optimization
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial">
+                    <div class="tutorial-header" onclick="toggleTutorial(this)">
+                        <span>20. AI Video Report Generation<span class="time-badge">⏱ 50 min setup</span><span class="difficulty-badge">★★☆ Medium</span></span>
+                        <span class="tutorial-icon">▼</span>
+                    </div>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 1: Choose AI Video Platform</div>
+                            <div class="tutorial-step-content">
+                                <strong>Platform Options:</strong><br>
+                                • <strong>HeyGen</strong> - Best for realistic avatars, custom voices<br>
+                                  - Pricing: $29-89/month<br>
+                                  - API: Yes (REST API)<br>
+                                  - Quality: Excellent lip-sync<br>
+                                • <strong>Synthesia</strong> - Best for professional business content<br>
+                                  - Pricing: $30-90/month<br>
+                                  - API: Yes<br>
+                                  - 140+ avatars, 120+ languages<br>
+                                • <strong>D-ID</strong> - Most affordable, good quality<br>
+                                  - Pricing: $5.90-300/month<br>
+                                  - API: Yes<br>
+                                  - Fast generation (2-5 min)<br>
+                                <br>
+                                <strong>Recommendation:</strong> HeyGen for agencies (best quality/price ratio)<br>
+                                • Sign up at heygen.com<br>
+                                • Get API key from Settings → API Access<br>
+                                • Test with sample script
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 2: Generate Video Script with AI</div>
+                            <div class="tutorial-step-content">
+                                <strong>Claude API Script Generator:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import anthropic
+
+def generate_video_script(client_name, report_data):
+    client = anthropic.Anthropic(api_key="your-key")
+    
+    prompt = f"""Create a 60-second video script for {client_name}'s weekly marketing report.
+
+Performance data:
+- Total Spend: ${report_data['spend']:,.0f}
+- Total Revenue: ${report_data['revenue']:,.0f}
+- ROAS: {report_data['roas']:.1f}
+- Top Campaign: {report_data['top_campaign']} (ROAS: {report_data['top_roas']:.1f})
+- Conversions: {report_data['conversions']}
+
+Script requirements:
+- 60 seconds (150-160 words)
+- Conversational, friendly tone
+- Lead with the most impressive metric
+- Mention specific campaign wins
+- End with one actionable next step
+- NO technical jargon
+- Include natural pauses [PAUSE]
+
+Format: Just the spoken words, no stage directions except [PAUSE]."""
+
+    message = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=500,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    return message.content[0].text
+
+# Example output:
+script = generate_video_script("Acme Corp", {
+    'spend': 12450,
+    'revenue': 54320,
+    'roas': 4.36,
+    'top_campaign': 'Summer Sale - Prospecting',
+    'top_roas': 6.2,
+    'conversions': 284
+})
+print(script)</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 3: Create Video with HeyGen API</div>
+                            <div class="tutorial-step-content">
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import requests
+import time
+
+def create_heygen_video(script, client_name):
+    """Generate video using HeyGen API"""
+    
+    API_KEY = "your-heygen-api-key"
+    
+    # Step 1: Create video
+    create_url = "https://api.heygen.com/v2/video/generate"
+    
+    payload = {
+        "video_inputs": [{
+            "character": {
+                "type": "avatar",
+                "avatar_id": "Angela-inblacksuit-20220820",  # Choose avatar
+                "avatar_style": "normal"
+            },
+            "voice": {
+                "type": "text",
+                "input_text": script,
+                "voice_id": "2d5b0e6cf36c4fc3b46e702c4dcba28e",  # Female professional
+                "speed": 1.0
+            },
+            "background": {
+                "type": "color",
+                "value": "#FFFFFF"
+            }
+        }],
+        "dimension": {
+            "width": 1920,
+            "height": 1080
+        },
+        "title": f"{client_name} - Weekly Report"
+    }
+    
+    headers = {
+        "X-Api-Key": API_KEY,
+        "Content-Type": "application/json"
+    }
+    
+    response = requests.post(create_url, json=payload, headers=headers)
+    video_id = response.json()['data']['video_id']
+    
+    # Step 2: Poll for completion
+    status_url = f"https://api.heygen.com/v1/video_status.get?video_id={video_id}"
+    
+    while True:
+        status_response = requests.get(status_url, headers=headers)
+        status = status_response.json()['data']['status']
+        
+        if status == 'completed':
+            video_url = status_response.json()['data']['video_url']
+            return video_url
+        elif status == 'failed':
+            raise Exception("Video generation failed")
+        
+        time.sleep(10)  # Check every 10 seconds
+
+# Usage
+video_url = create_heygen_video(script, "Acme Corp")
+print(f"Video ready: {video_url}")</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 4: Add Branded Elements</div>
+                            <div class="tutorial-step-content">
+                                <strong>Post-Processing with FFmpeg:</strong><br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+import subprocess
+
+def add_branding(video_url, client_logo_path, output_path):
+    """Add client logo and metrics overlay"""
+    
+    # Download video from HeyGen
+    subprocess.run([
+        "wget", video_url, "-O", "temp_video.mp4"
+    ])
+    
+    # Add logo overlay (top right corner)
+    subprocess.run([
+        "ffmpeg", "-i", "temp_video.mp4",
+        "-i", client_logo_path,
+        "-filter_complex",
+        "[1:v]scale=200:-1[logo];[0:v][logo]overlay=W-w-20:20",
+        "-codec:a", "copy",
+        output_path
+    ])
+    
+    return output_path
+
+# Add data visualizations as overlay
+def add_metrics_overlay(input_video, metrics_image, output_path):
+    """Overlay chart/graph at specific timestamp"""
+    subprocess.run([
+        "ffmpeg", "-i", input_video,
+        "-i", metrics_image,
+        "-filter_complex",
+        "[1:v]fade=t=in:st=5:d=1,fade=t=out:st=10:d=1[chart];"
+        "[0:v][chart]overlay=50:50:enable='between(t,5,11)'",
+        "-codec:a", "copy",
+        output_path
+    ])</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 5: Automate Video Delivery</div>
+                            <div class="tutorial-step-content">
+                                <strong>Complete Workflow (Make.com):</strong><br>
+                                • Trigger: Schedule - Every Friday at 2 PM<br>
+                                • Module 1: Google Sheets - Get client report data<br>
+                                • Module 2: Claude API - Generate script<br>
+                                • Module 3: HeyGen API - Create video<br>
+                                • Module 4: Download video file<br>
+                                • Module 5: FFmpeg - Add branding<br>
+                                • Module 6: Upload to Vimeo/YouTube (unlisted)<br>
+                                • Module 7: Send email with video link<br>
+                                <code style="display: block; white-space: pre-wrap; background: #f1f3f5; padding: 6px; border-radius: 3px; margin-top: 4px;">
+Email Template:
+Subject: Your Weekly Video Report is Ready 🎥
+
+Hi {{client_name}},
+
+Your personalized video report for this week is ready!
+
+👉 Watch now: {{video_link}}
+
+Key highlights:
+• ROAS: {{roas}}
+• Revenue: ${{revenue}}
+• Top performer: {{top_campaign}}
+
+Full dashboard: {{dashboard_link}}
+
+Questions? Hit reply.
+
+Best,
+{{account_manager}}</code>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="tutorial-step-title">Step 6: Track Engagement & Iterate</div>
+                            <div class="tutorial-step-content">
+                                <strong>Metrics to Monitor:</strong><br>
+                                • Video view rate (% of clients who watch)<br>
+                                • Average watch time (full video or drop-off?)<br>
+                                • Client feedback/replies<br>
+                                • Preference: video vs PDF vs dashboard<br>
+                                <br>
+                                <strong>A/B Testing Ideas:</strong><br>
+                                • Male vs female avatar (by client preference)<br>
+                                • 60s vs 90s vs 120s script length<br>
+                                • Formal vs conversational tone<br>
+                                • With vs without background music<br>
+                                • Showing metrics on screen vs voice only<br>
+                                <br>
+                                <strong>Cost Optimization:</strong><br>
+                                • HeyGen: ~$0.50-1.00 per minute of video<br>
+                                • Generate only for clients who engage with videos<br>
+                                • Offer as premium add-on service (+$200/month)<br>
+                                • Batch generate all videos at once (API efficiency)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="section">
+                <h2>💡 Pro Tips for Success</h2>
+                <div class="highlight">
+                    <strong>Start Small:</strong> Automate one report type fully before expanding
+                </div>
+                <div class="highlight">
+                    <strong>Version Control:</strong> Keep AI prompt history to track what works
+                </div>
+                <div class="highlight">
+                    <strong>Human Touch:</strong> Always review AI insights before client delivery
+                </div>
+                <div class="highlight">
+                    <strong>Client Education:</strong> Show clients the automation value, not just results
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="footer">
+            © 2026 Marketing Agency Automation Guide • AI-Powered Reporting Excellence
+        </div>
+    </div>
+    
+    <script>
+        function toggleTutorial(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.tutorial-icon');
+            
+            // Close all other tutorials
+            document.querySelectorAll('.tutorial-content').forEach(item => {
+                if (item !== content) {
+                    item.classList.remove('active');
+                    item.previousElementSibling.querySelector('.tutorial-icon').textContent = '▼';
+                }
+         
